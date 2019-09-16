@@ -121,24 +121,44 @@ namespace WindowsFormsDBStaff
             {
 
                 var Query = from customers in db.Customers
-                    join cars in db.Cars on customers.CustomerId equals cars.CarId
-                    join orders in db.Orders on customers.CustomerId equals orders.OrderId
-                    select new
-                    {
-                     Name = customers.Name,
-                     Phone = customers.Telephone_Number,
-                     Id = customers.CustomerId,
-                    };
+                            join cars in db.Cars on customers.CustomerId equals cars.CarId // Добавленны данные  по таблицам
+                            join orders in db.Orders on customers.CustomerId equals orders.OrderId
+                            select new
+                            {
+                                Name = customers.Name,
+                                Phone = customers.Telephone_Number,
+                                Id = customers.CustomerId,
+                                Marka = cars.Marka,
+                                Price = cars.Price,
+                                Owner = cars.Owner,
+                                Data = orders.OrderDate,
+                                Product = orders.Product_Description,
+                                CustomerId = orders.CustomerID,
+                                OrderId = orders.OrderId
+                                
+                            };
+                dataGridView3.DataSource = Query.ToArray();
+            }
+        }
 
+        private void button3_Click(object sender, EventArgs e)// Добавленна вывод данных из таблиц в TreeView
+        {
+            for (int i = 0; i < dataGridView3.Rows.Count; i++)
+            {
+                TreeNode node = new TreeNode("Данные");
+                for (int j = 0; j < dataGridView3.Columns.Count; j++)
+                {
+                    node.Nodes.Add(dataGridView3.Rows[i].Cells[j].Value.ToString());
+                }
+
+                treeView1.Nodes.Add(node);
             }
         }
         
-        private void button3_Click(object sender, EventArgs e)
-        {
-            // Ваш код
-        }
-     
-      
+    }
+
+
+
 
 
         //var Query = db.Customers.Join(db.Orders, customers => customers.CustomerId, orders => orders.OrderId,
@@ -155,7 +175,8 @@ namespace WindowsFormsDBStaff
         //dataGridView3.DataSource = Query.ToArray();
 
     }
-        }
+    
+
 
 
 
